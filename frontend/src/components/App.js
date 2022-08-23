@@ -25,7 +25,8 @@ function App() {
   const [selectedCard, setSelectedCard] = useState({});
   const [currentUser, setCurrentUser] = useState({});
   const [loggedIn, setloggedIn] = useState(false);
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState('');  
+  const [cards, setCards] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -34,6 +35,7 @@ function App() {
         setloggedIn(true);      
         setEmail(res.data.email);
         navigate('/');
+        setCurrentUser(res.data);
       }      
     })
     .catch((error) => {
@@ -61,8 +63,8 @@ function handleUpdateUser(value){
 }
 
 function handleUpdateAvatar(value){
-  api.updateAvatar(value).then((data) => {
-    setCurrentUser(data);
+  api.updateAvatar(value).then((res) => {
+    setCurrentUser(res.data);
     closeAllPopups();
   })
   .catch((error) => {
@@ -92,13 +94,11 @@ function handleAutharization(value){
     const jwt = data.token;
     if(jwt){
       localStorage.setItem('jwt', jwt);
-       setloggedIn(true);
        setInfoTooltip({
         isOpen: true,
         title: 'Вы успешно авторизовались!',
         status: 'success'
       });
-       setEmail(data.email);
     }
   })
   .catch((error) => {
@@ -137,7 +137,6 @@ function closeAllPopups(){
   setSelectedCard({});  
 }
 
-const [cards, setCards] = useState([]);
 
 useEffect(() => {
   api.getInitialCards().then((res) => {

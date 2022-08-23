@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const { celebrate, Joi } = require('celebrate');
 const { errors } = require('celebrate');
 const auth = require('./middlewares/auth');
+require('dotenv').config();
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const NotFoundError = require('./errors/not-found-err');
 const {

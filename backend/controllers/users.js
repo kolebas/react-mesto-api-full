@@ -6,6 +6,8 @@ const ConflictError = require('../errors/conflict-err');
 const BadRequestError = require('../errors/bad-request-err');
 const Auth = require('../errors/auth-err');
 
+const { NODE_ENV, JWT_SECRET } = process.env;
+
 module.exports.getUsers = (req, res, next) => {
   User.find({})
     .then((users) => res.send({ data: users }))
@@ -13,7 +15,7 @@ module.exports.getUsers = (req, res, next) => {
 };
 
 module.exports.getMe = (req, res, next) => {
-  User.findById({_id: req.user._id})
+  User.findById({ _id: req.user._id })
     .then((user) => { if (!user) { throw new NotFoundError('Нет пользователя с таким id'); } res.send({ data: user }); })
     .catch(next);
 };
@@ -23,7 +25,7 @@ module.exports.login = (req, res, next) => {
   return User.findUserByCredentials(email, password)
     .then((user) => {
       res.send({
-        token: jwt.sign({ _id: user._id }, 'super-strong-secret', { expiresIn: '7d' }),
+        token: jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', { expiresIn: '7d' }),
       });
     })
     .catch(() => {
