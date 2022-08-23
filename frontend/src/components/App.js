@@ -31,11 +31,12 @@ function App() {
 
   useEffect(() => {
     auth.checkToken().then((res) => {
-      if(res.data){
-        setloggedIn(true);      
-        setEmail(res.data.email);
+      if(res.data){     
         navigate('/');
+        setloggedIn(true);   
+        setEmail(res.data.email);
         setCurrentUser(res.data);
+        getCards();
       }      
     })
     .catch((error) => {
@@ -137,8 +138,7 @@ function closeAllPopups(){
   setSelectedCard({});  
 }
 
-
-useEffect(() => {
+function getCards(){
   api.getInitialCards().then((res) => {
     const data = res.data
     setCards(
@@ -155,6 +155,11 @@ useEffect(() => {
   .catch((error) => {
     console.log(error)
   })
+}
+
+
+useEffect(() => {
+  getCards();
 }, []);
 
 function handleCardLike(card) {
