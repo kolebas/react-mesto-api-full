@@ -1,0 +1,27 @@
+.discover__subtitle {
+  margin: 0;
+  grid-area: subtitle;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 22px;
+  color: #FFFFFF;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 336px;
+}
+
+@media screen and (max-width: 880px) {
+  .discover__subtitle{
+    font-size: 14px;
+    line-height: 17px;
+  }  
+}
+
+@media screen and (max-width: 590px) {
+  .discover__subtitle{
+    text-align: center;
+    margin-top: 7px;
+  }  
+}

@@ -1,0 +1,19 @@
+.discover {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: max-content;
+  grid-template-areas: 
+              "avatar title edit-button"
+              "avatar subtitle subtitle";
+  align-items: baseline;            
+}
+
+@media screen and (max-width: 590px) {
+  .discover{
+    margin-top: 0;
+    grid-template-areas: 
+              "avatar avatar"
+              "title edit-button"
+              "subtitle subtitle";
+  }  
+}

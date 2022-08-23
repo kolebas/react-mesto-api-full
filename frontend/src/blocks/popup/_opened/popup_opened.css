@@ -1,0 +1,17 @@
+.popup_opened{
+  display: flex;
+  opacity: 1;
+  animation-duration: .5s;
+  animation-name: slidein;   
+}
+
+@keyframes slidein {
+  from {
+    visibility: hidden;
+    opacity: 0;
+  }
+  to {
+    visibility: visible;
+    opacity: 1;
+  }  
+}
