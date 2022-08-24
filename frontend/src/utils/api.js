@@ -1,15 +1,14 @@
-import { headers, url } from "./constants.js";
+import { url } from './constants.js';
 
 class Api {
   constructor(options) {
     this._url = options.baseUrl
-    this._headers = options.headers
   }
 
   getInitialCards() {
     return fetch(`${this._url}/cards`, {
       headers: {
-        "Authorization" : `Bearer ${localStorage.getItem('jwt')}`,
+        'Authorization' : `Bearer ${localStorage.getItem('jwt')}`,
         'Content-Type': 'application/json'
       }
     })
@@ -22,7 +21,10 @@ class Api {
   addCard(method, data, addUrl = '/cards') {
     return fetch(this._url + addUrl, {
       method: method,
-      headers: this._headers,
+      headers: {
+        'Authorization' : `Bearer ${localStorage.getItem('jwt')}`,
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify(data)
     })
       .then(this._checkResponse)
@@ -30,7 +32,10 @@ class Api {
 
   deleteCard(method, cardId) {
     return fetch(`${this._url}/cards/${cardId}`, {
-      headers: this._headers,
+      headers: {
+        'Authorization' : `Bearer ${localStorage.getItem('jwt')}`,
+        'Content-Type': 'application/json'
+      },
       method: method,
     })
       .then(this._checkResponse)
@@ -38,7 +43,10 @@ class Api {
 
   changeLikeCard(method, cardId) {
     return fetch(`${this._url}/cards/${cardId}/likes`, {
-      headers: this._headers,
+      headers: {
+        'Authorization' : `Bearer ${localStorage.getItem('jwt')}`,
+        'Content-Type': 'application/json'
+      },
       method: method,
     })
       .then(this._checkResponse)
@@ -47,7 +55,10 @@ class Api {
   setProfile() {
     return fetch(this._url + '/users/me', {
       method: 'GET',
-      headers: this._headers,
+      headers: {
+        'Authorization' : `Bearer ${localStorage.getItem('jwt')}`,
+        'Content-Type': 'application/json'
+      }
     })
       .then(this._checkResponse)
       .then(data => {
@@ -58,7 +69,10 @@ class Api {
   updateUserInfo(data) {
     return fetch(this._url + '/users/me', {
       method: 'PATCH',
-      headers: this._headers,
+      headers: {
+        'Authorization' : `Bearer ${localStorage.getItem('jwt')}`,
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify(data)
     })
       .then(this._checkResponse)
@@ -70,7 +84,10 @@ class Api {
   updateAvatar(data) {
     return fetch(this._url + '/users/me/avatar', {
       method: 'PATCH',
-      headers: this._headers,
+      headers: {
+        'Authorization' : `Bearer ${localStorage.getItem('jwt')}`,
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify(data)
     })
       .then(this._checkResponse)
@@ -88,7 +105,6 @@ class Api {
 
 const api = new Api({
   baseUrl: url,
-  headers: headers,
   method: 'GET',
 });
 

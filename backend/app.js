@@ -1,15 +1,11 @@
 const express = require('express');
+const helmet = require('helmet');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const { celebrate, Joi } = require('celebrate');
 const { errors } = require('celebrate');
-const auth = require('./middlewares/auth');
+const router = require('./routes/index');
 require('dotenv').config();
 const { requestLogger, errorLogger } = require('./middlewares/logger');
-const NotFoundError = require('./errors/not-found-err');
-const {
-  login, createUser,
-} = require('./controllers/users');
 
 const allowedCors = [
   'https://front.kolebas.nomoredomains.sbs',
@@ -22,6 +18,7 @@ const app = express();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(helmet());
 
 // eslint-disable-next-line consistent-return
 app.use((req, res, next) => {
@@ -42,34 +39,7 @@ app.use((req, res, next) => {
 
 app.use(requestLogger);
 
-app.use('/cards', auth, require('./routes/cards'));
-app.use('/users', auth, require('./routes/users'));
-
-app.get('/crash-test', () => {
-  setTimeout(() => {
-    throw new Error('Сервер сейчас упадёт');
-  }, 0);
-});
-
-app.post('/signin', celebrate({
-  body: Joi.object().keys({
-    email: Joi.string().required().email(),
-    password: Joi.string().required(),
-  }),
-}), login);
-app.post('/signup', celebrate({
-  body: Joi.object().keys({
-    email: Joi.string().required().email(),
-    password: Joi.string().required(),
-    name: Joi.string().min(2).max(30),
-    about: Joi.string().min(2).max(30),
-    avatar: Joi.string().pattern(/https?:\/\/(?:[-\w]+\.)?([-\w]+)\.\w+(?:\.\w+)?\/?.*/i),
-  }),
-}), createUser);
-
-app.use((req, res, next) => {
-  next(new NotFoundError('Маршрут не найден'));
-});
+app.use(router);
 
 app.use(errorLogger);
 
